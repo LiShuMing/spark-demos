@@ -16,5 +16,8 @@ object DummyCountScala {
 				val rng = new Random()
 				for (i <- x) yield rng.nextLong()
 			}).take(1)
+
+		// stop sparkContenxt
+    sc.stop()
 	}
 }

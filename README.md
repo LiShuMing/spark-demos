@@ -50,7 +50,7 @@ Scala:
 ```
 
 ### 运行(Azakaban)
-在Netease Mammut平台(https://bdms.netease.com)运行，步骤如下：
+在(Mammut平台)[https://bdms.netease.com]运行，步骤如下：
 * 申请集群权限，此步骤略去，找相关负责人;
 * 数据开发->新建(左上角)->新建任务->填写任务名称->选择(任务组)->上传刚刚生成的spark-demo.zip文件->选择申请的文件夹->添加描述->确定;
 * 在申请的文件夹下会发现，刚刚上传的spark-demo的文件包->选择spark-demo节点->编辑->选择spark版本(跟你编译版本一致)->运行;

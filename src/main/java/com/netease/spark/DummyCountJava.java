@@ -44,5 +44,8 @@ public class DummyCountJava {
         }).count();
 
         System.out.println(String.format("count(100 * 100) is %d", result));
+
+        //stop sparkContenxt
+        sc.stop();
     }
 }
