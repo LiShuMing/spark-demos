@@ -22,14 +22,14 @@ Spark1.6.2-Hadoop2.7.3
 ```
 
 可参考编译分支:
-Spark-2.0.2: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo
-Spark-2.1.1: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo/tree/spark-v2.1.1
-Spark-1.6.2: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo/tree/spark-v1.6.2
+> Spark-2.0.2: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo  
+> Spark-2.1.1: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo/tree/spark-v2.1.1  
+> Spark-1.6.2: https://g.hz.netease.com/hzlishuming/spark-azkaban-demo/tree/spark-v1.6.2  
 
 当前项目、分支开发结构如下：
-master: Spark-2.0.2
-branch-spark-v2.1.1: Spark-2.1.1
-branch-spark-v1.6.2: Spark-1.6.2
+> master: Spark-2.0.2  
+> branch-spark-v2.1.1: Spark-2.1.1  
+> branch-spark-v1.6.2: Spark-1.6.2
 
 ### 编译
 ---
