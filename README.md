@@ -61,10 +61,41 @@ Scala:
 ./spark-submit --master local[2] --class com.netease.spark.DummyCountScala ${SPARK_DEMO}/target/spark-demo-${version}.jar
 ```
 
-### 运行(Azakaban)
+### 运行(Mammut)
+
+#### 普通zip包项目运行
 在(Mammut平台)[https://bdms.netease.com]运行，步骤如下：
 * 申请集群权限，此步骤略去，找相关负责人;
 * 数据开发->新建(左上角)->新建任务->填写任务名称->选择(任务组)->上传刚刚生成的spark-demo.zip文件->选择申请的文件夹->添加描述->确定;
 * 在申请的文件夹下会发现，刚刚上传的spark-demo的文件包->选择spark-demo节点->编辑->选择spark版本(跟你编译版本一致)->运行;
 * 点击节点查看运行结果;
+
+#### Spark-submit的形式运行
+##### 依赖文件
+1. keytab文件， 需在Mammut平台个人中心下载；
+2. 编译script脚本；
+3. 将keytab文件、生成的jar包、script脚本打包成一个zip文件；
+
+
+其中，编辑script shell脚本参考如下：
+```
+# spark-demo.sh
+
+# login using your keytab file
+kinit -kt ./spark-demo-202/mammut.keytab mammut/bigdata@HADOOP.HZ.NETEASE.COM
+
+# spark2.0.2
+export SPARK_HOME=/home/hadoop/spark-2.0.2-bin-hadoop2.7
+# spark-2.1.1
+export SPARK_HOME=/home/hadoop/spark-2.1.1-bin-hadoop2.7
+
+# TODO: set conf as you want!!!
+${SPARK_HOME}/bin/spark-submit --class com.netease.spark.DummyCountJava --master yarn  --deploy-mode client --driver-memory 2048M --executor-memory 512M --executor-cores 1 --queue default ./spark-demo-202/spark-demo-202.jar
+```
+
+##### 在Mammut平台上使用
+1. 新建（左上角）-> 新建任务 -> 作业流 -> 指定目录；
+2. 选择刚刚创建的作业流->拖拽一个script类型的作业->点击左侧上传资源->上传刚刚打包的zip文件；
+3. 编辑刚刚新建的script作业，书写脚本，如上述实例，脚本为./spark-demo-202/spark-demo.sh;
+4. 运行作业，即可操作；
 
