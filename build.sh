@@ -17,7 +17,8 @@ SPARK_DEMO=spark-demo-${SPARK_VERSION}
 rm -rf ${SPARK_DEMO}
 mkdir -p ${SPARK_DEMO}
 
-cp ./target/spark-demo-0.1.0.jar ./${SPARK_DEMO}/spark-demo-${SPARK_VERSION}.jar
+#cp ./target/spark-demo-0.1.0.jar ./${SPARK_DEMO}/spark-demo-${SPARK_VERSION}.jar
+cp ./target/spark-demo-0.1.0-jar-with-dependencies.jar ./${SPARK_DEMO}/spark-demo-${SPARK_VERSION}.jar
 cp ./conf/project.properties ./${SPARK_DEMO}
 
 cp ./conf/spark-demo.flow ./${SPARK_DEMO}
