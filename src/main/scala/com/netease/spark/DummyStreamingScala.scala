@@ -7,7 +7,7 @@ import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
-object DymmyStreamingScala {
+object DummyStreamingScala {
 
   def main(args: Array[String]): Unit = {
 
