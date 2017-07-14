@@ -22,23 +22,51 @@ object DymmyStreamingScala {
 
 
     val conf = new SparkConf().setAppName("Kafka10 Streaming")
-    val ssc = new StreamingContext(conf, Seconds(60))
+    val ssc = new StreamingContext(conf, Seconds(2))
 
     val topics = Array("spark-logs")
     val stream = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent,
-      Subscribe[String, String](topics, kafkaParams)
-    )
+      Subscribe[String, String](topics, kafkaParams))
 
-    stream.foreachRDD(rdd =>
+
+    /**
+     val wordCount = stream.map(_.value()).flatMap(_.split(" "))
+      .filter(_.equalsIgnoreCase("exception")).map(x => (x, 1L))
+      .reduceByKeyAndWindow(_ + _, _ - _, Minutes(2), Seconds(30), 2)*/
+
+    // TOP N Problem
+    /**
+    stream.map(_.value()).flatMap(_.split(" "))
+      .map(x => (x, 1L)).reduceByKey(_ + _).map( x => (x._2, x._1))
+      .foreachRDD(rdd => {
+        rdd.sortByKey(false)
+          .map(x => (x._2, x._1))
+          .saveAsTextFile("/tmp/spark-streaming-demo-1/wordCount")
+      })*/
+
+    val  topN = stream.map(_.value()).flatMap(_.split(" "))
+      .map(x => (x, 1L)).reduceByKey(_ + _).map(x => (x._2, x._1))
+      .transform(rdd =>
+        rdd.sortByKey(false).map(x => (x._2, x._1))
+      )
+    topN.print()
+
+    //wordCount.print()
+    //wordCount.saveAsTextFiles("/tmp/spark-streaming-demo/wordCount")
+    ssc.checkpoint("/tmp/spark-checkpoint")
+
+    /**stream.foreachRDD(rdd =>
     rdd.foreachPartition { iter =>
       iter.foreach(record =>
-        println(s"key:${record.key()}, value:${record.value()}")
-      )
-    })
+        //println(s"key:${record.key()}, value:${record.value()}")
+        if (record.value().toLowerCase.contains("execption")) {
 
-    ssc.checkpoint("/tmp/spark-checkpoint")
+        }
+      )
+    })*/
+
 
     ssc.start()
     ssc.awaitTermination()
