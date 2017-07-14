@@ -22,6 +22,7 @@ object DymmyStreamingScala {
 
 
     val conf = new SparkConf().setAppName("Kafka10 Streaming")
+    conf.set("spark.yarn.access.namenodes", "hdfs://hz-cluster3,hdfs://hz-cluster4")
     val ssc = new StreamingContext(conf, Seconds(2))
 
     val topics = Array("spark-logs")
@@ -49,9 +50,9 @@ object DymmyStreamingScala {
     val  topN = stream.map(_.value()).flatMap(_.split(" "))
       .map(x => (x, 1L)).reduceByKey(_ + _).map(x => (x._2, x._1))
       .transform(rdd =>
-        rdd.sortByKey(false).map(x => (x._2, x._1))
-      )
-    topN.print()
+        rdd.sortByKey(false).map(x => (x._2, x._1)))
+    topN.saveAsTextFiles("/tmp/spark-streaming-demo-2/wordCount")
+    //topN.print()
 
     //wordCount.print()
     //wordCount.saveAsTextFiles("/tmp/spark-streaming-demo/wordCount")
