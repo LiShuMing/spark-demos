@@ -19,7 +19,8 @@ mkdir -p ${SPARK_DEMO}
 
 cp ./target/spark-demo-0.1.0.jar ./${SPARK_DEMO}/spark-demo-${SPARK_VERSION}.jar
 cp ./security/mammut.keytab ./${SPARK_DEMO}
-cp ./script/spark-test.sh ./${SPARK_DEMO}
+#cp ./script/spark-test.sh ./${SPARK_DEMO}
+cp ./script/spark-submit.job ./${SPARK_DEMO}
 
 #cp ./target/spark-demo-0.1.0-jar-with-dependencies.jar ./${SPARK_DEMO}/spark-demo-${SPARK_VERSION}.jar
 #cp ./conf/project.properties ./${SPARK_DEMO}
