@@ -1,8 +1,11 @@
 package com.netease.spark
 
-import org.apache.spark.sql.SparkSession
 
-class DummyStructStreamingScala {
+import org.apache.spark.sql.expressions.Window
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+
+object DummyStructStreamingScala {
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
@@ -23,12 +26,26 @@ class DummyStructStreamingScala {
       .selectExpr("CAST(value AS STRING)")
       .as[String]
 
-    val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count()
+    // Basic Usage
+    val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count().sort($"count".desc)
 
+    // outputMode: complete console
+    // https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html
     val query = wordCounts.writeStream
+      .format("parquet")
+      .option("checkpointLocation", "/tmp/spark-checkpoint-demo/")
+      .option("path", "/tmp/spark-azkanban-demo-3/struct-streaming")
+      .start()
+
+    /**
+    val wordCounts = lines.flatMap(_.split(" ")).groupBy("value").count()
+    val w = Window.partitionBy($"value").orderBy(desc("count"))
+    val topN = wordCounts.withColumn("count", rank.over(w)).where(rank <= 10)
+
+    val query = topN.writeStream
       .outputMode("complete")
       .format("console")
-      .start()
+      .start()*/
 
     query.awaitTermination()
   }
