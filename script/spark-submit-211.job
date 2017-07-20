@@ -1,0 +1,17 @@
+type=script
+
+script=export SPARK_HOME=/home/hadoop/spark-2.1.1-bin-hadoop2.7; \
+  export JAVA_HOME=/home/hadoop/java-current; \
+  export HADOOP_HOME=/home/hadoop/hadoop-current; \
+  export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop; \
+  /home/hadoop/spark-2.1.1-bin-hadoop2.7/bin/spark-submit \
+  --conf spark.yarn.keytab=./mammut.keytab  \
+  --conf spark.yarn.principal=mammut/bigdata@HADOOP.HZ.NETEASE.COM \
+  --class com.netease.spark.DummyCountJava \
+  --master yarn  \
+  --deploy-mode client \
+  --driver-memory 2048M \
+  --executor-memory 512M \
+  --executor-cores 1 \
+  --queue default \
+  ./spark-demo-202.jar
