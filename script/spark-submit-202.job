@@ -10,5 +10,5 @@ script=/home/hadoop/spark-2.0.2-bin-hadoop2.7/bin/spark-submit \
   --executor-memory 512M \
   --executor-cores 1 \
   --queue default \
-  --driver-class-path ../:./:/home/hadoop/spark-2.0.2-bin-hadoop2.7/jars:/home/hadoop/hadoop-current/etc/hadoop:/home/hadoop/hadoop-current/share/hadoop/common/*:/home/hadoop/hadoop-current/share/hadoop/common/lib/*:/home/hadoop/hadoop-current/share/hadoop/hdfs/*:/home/hadoop/hadoop-current/share/hadoop/hdfs/lib/*:/home/hadoop/hadoop-current/share/hadoop/mapreduce/*:/home/hadoop/hadoop-current/share/hadoop/mapreduce/lib/*:/home/hadoop/hadoop-current/share/hadoop/yarn/*:/home/hadoop/hadoop-current/share/hadoop/yarn/lib/*:/home/hadoop/hadoop-current/share/hadoop/tools/lib/* \
+  --driver-class-path ../:./ \
   ./spark-demo-202.jar
