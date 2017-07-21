@@ -1,11 +1,10 @@
-package com.netease.spark
+package com.netease.spark.udf
 
-import org.apache.spark.sql.expressions.MutableAggregationBuffer
-import org.apache.spark.sql.expressions.UserDefinedAggregateFunction
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.expressions.{MutableAggregationBuffer, UserDefinedAggregateFunction}
 import org.apache.spark.sql.types._
 
-class DummySQLUDF extends UserDefinedAggregateFunction {
+class GeometricMean extends UserDefinedAggregateFunction {
   // This is the input fields for your aggregate function.
   override def inputSchema: org.apache.spark.sql.types.StructType =
     StructType(StructField("value", DoubleType) :: Nil)
@@ -44,3 +43,4 @@ class DummySQLUDF extends UserDefinedAggregateFunction {
     math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
   }
 }
+
