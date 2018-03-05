@@ -8,7 +8,7 @@
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>SparkTemplate</name>
+    <name>SparkDemo</name>
     <description>Spark Demo Project</description>
 
     <organization>
