@@ -1,7 +1,7 @@
 execution-jar=./spark-demo.jar
 master=yarn-client
 class=com.netease.spark.DummyCountJava
-spark-version=2.0.2
+spark-version=2.0.2-2.7.3
 
 conf.spark.dynamicAllocation.maxExecutors=1
 executor-memory=512m
