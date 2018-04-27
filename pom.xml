@@ -25,6 +25,7 @@
         <scala.version>2.11.8</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <java.version>1.7</java.version>
+        <kafka.version>0.10.0.1</kafka.version>
 
         <!-- for test -->
         <junit.version>4.12</junit.version>
@@ -52,6 +53,33 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- for spark streaming -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-8_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka-0-10_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_${scala.binary.version}</artifactId>
+            <version>${kafka.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- for test -->

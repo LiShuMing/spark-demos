@@ -4,6 +4,8 @@
 
 build:
 	mvn clean package
+	rm -rf spark-demo-202
+	sh build.sh
 
 clean:
 	mvn clean
