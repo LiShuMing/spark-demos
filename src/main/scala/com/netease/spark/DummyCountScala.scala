@@ -17,7 +17,6 @@ object DummyCountScala {
 				for (i <- x) yield rng.nextLong()
 			}).take(1)
 
-		// stop sparkContenxt
     sc.stop()
 	}
 }
