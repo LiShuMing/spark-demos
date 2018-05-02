@@ -53,7 +53,7 @@ object HdfsConnection {
     this.synchronized {
       // 如果第一次, 需要初始化
       if (currentPath == null) {
-        currentPath = props.getProperty(Params.HDFS_PATH)
+        currentPath = props.getProperty(Consts.HDFS_PATH)
       }
 
       // 获取当前时间

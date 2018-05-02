@@ -17,7 +17,7 @@
 
 package com.netease.spark.hbase
 
-import com.netease.spark.utils.{BroadConfig, Params}
+import com.netease.spark.utils.{BroadConfig, Consts}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.{HBaseConfiguration, HTableDescriptor, TableName}
 import org.apache.hadoop.hbase.client.{HBaseAdmin, HConnection, HConnectionManager, HTableInterface}
@@ -43,16 +43,16 @@ object KafkaToHbase {
     val ssc = new StreamingContext(ctx, Seconds(2))
 
     // 创建 kafka stream, 注意这段代码需要放在里面
-    val kafkaTopics = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_TOPICS)
-    val kafkaBrokers = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_BROKERS)
-    val kafkaZK = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_ZK)
-    val kafkaGroup = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_GROUP)
-    val kafkaNumStreams = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_NUM_STREAMS) toInt
+    val kafkaTopics = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_TOPICS)
+    val kafkaBrokers = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_BROKERS)
+    val kafkaZK = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_ZK)
+    val kafkaGroup = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_GROUP)
+    val kafkaNumStreams = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_NUM_STREAMS) toInt
 
     LOG.info(s"topics: $kafkaTopics, zookeeper: $kafkaZK, group id: $kafkaGroup, num streams: $kafkaNumStreams")
 
     val topicsSet = kafkaTopics.split(",").toSet
-    val kafkaParams = Map[String, Object](
+    val kafkaConsts = Map[String, Object](
       "bootstrap.servers" -> kafkaBrokers,
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
@@ -64,10 +64,10 @@ object KafkaToHbase {
     val messages = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent,
-      Subscribe[String, String](topicsSet, kafkaParams))
+      Subscribe[String, String](topicsSet, kafkaConsts))
 
     // TODO, 注意在必须将`HBASE_CONF_DIR`路径设置在Spark Driver的classpath中， 可以通过spark-defaults.conf或者通过--driver-class-path设置；
-    val hbaseTable = BroadConfig.getInstance(ctx).value.getProperty(Params.HBASE_TABLE)
+    val hbaseTable = BroadConfig.getInstance(ctx).value.getProperty(Consts.HBASE_TABLE)
 
     messages.foreachRDD { x =>
       x.foreachPartition{ y =>
@@ -95,6 +95,8 @@ object KafkaToHbase {
             System.out.println("has received -> " + record)
             hbaseOutputWriter.insertOneLineToHbase(rowkey, "messages", record.toString() , "f1", table)
           })
+        } catch {
+          case e: Exception  => LOG.warn("write to HBase failed", e)
         }
 
         null

@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-package com.netease.spark.utils
+package com.netease.spark.utils;
 
-object Params {
+public class Consts {
   // kafka params
-  val KAFKA_ZK = "kafka.zookeeper"
-  val KAFKA_GROUP = "kafka.groupid"
-  val KAFKA_TOPICS = "kafka.topics"
-  val KAFKA_NUM_STREAMS = "kafka.num.streams"
-  val KAFKA_BROKERS = "kafka.brokers"
+  public static final String KAFKA_ZK = "kafka.zookeeper";
+  public static final String KAFKA_GROUP = "kafka.groupid";
+  public static final String KAFKA_TOPICS = "kafka.topics";
+  public static final String KAFKA_NUM_STREAMS = "kafka.num.streams";
+  public static final String KAFKA_BROKERS = "kafka.brokers";
 
   // hdfs params
-  val HDFS_PATH = "hdfs.path"
+  public static final String HDFS_PATH = "hdfs.path";
 
-  val HBASE_TABLE = "hbase.table"
-  val HBASE_ZK = "hbase.zk"
-  val HBASE_PRINCIPLE = "hbase.principle"
-  val HBASE_KEYTAB = "hbase.keytab"
+  public static final String HBASE_TABLE = "hbase.table";
+  public static final String HBASE_ZK = "hbase.zk";
+  public static final String HBASE_PRINCIPLE = "hbase.principle";
+  public static final String HBASE_KEYTAB = "hbase.keytab";
 }

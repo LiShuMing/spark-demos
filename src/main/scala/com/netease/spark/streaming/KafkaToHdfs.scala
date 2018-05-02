@@ -17,7 +17,7 @@
 
 package com.netease.spark.streaming
 
-import com.netease.spark.utils.{BroadConfig, Env, HdfsConnection, Params}
+import com.netease.spark.utils.{BroadConfig, Env, HdfsConnection, Consts}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.log4j.Logger
 import org.apache.spark.streaming._
@@ -39,12 +39,12 @@ object KafkaToHdfs {
 
   private def functionToCreateContext(): StreamingContext = {
     // 加载配置文件, 配置文件示例为: conf.properties
-    val sparkConf = new SparkConf().setAppName("Kafka2Hdfs").
-      set("spark.streaming.receiver.writeAheadLog.enable", "true"). // 先写日志, 提高容错性, 避免 receiver 挂掉
-      set("spark.streaming.receiver.maxRate", "5000"). // 每秒的读取速率
-      set("spark.streaming.stopGracefullyOnShutdown", "true"). // 设置为 true 会 gracefully 的关闭 StreamingContext
-      set("spark.streaming.blockInterval", "1000ms") // block 的大小, 每个 block interval 的数据对应于一个 task
+    val sparkConf = new SparkConf().setAppName("Kafka2Hdfs")
+      .set("spark.streaming.receiver.writeAheadLog.enable", "true") // 先写日志, 提高容错性, 避免 receiver 挂掉
+      .set("spark.streaming.receiver.maxRate", "5000") // 每秒的读取速率
+      .set("spark.streaming.blockInterval", "1000ms") // block 的大小, 每个 block interval 的数据对应于一个 task
       .set("spark.streaming.kafka.maxRatePerPartition", "1000")
+      .set("spark.streaming.stopGracefullyOnShutdown", "true") // 设置为 true 会 gracefully 的关闭 StreamingContext
       .set("spark.streaming.stopSparkContextByDefault", "true")
 
     if (Env.TEST) {
@@ -56,11 +56,11 @@ object KafkaToHdfs {
     val ssc = new StreamingContext(ctx, Seconds(10))
 
     // 创建 kafka stream, 注意这段代码需要放在里面
-    val topics = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_TOPICS)
-    val brokers = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_BROKERS)
-    val zk = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_ZK)
-    val group = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_GROUP)
-    val numStreams = BroadConfig.getInstance(ctx).value.getProperty(Params.KAFKA_NUM_STREAMS) toInt
+    val topics = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_TOPICS)
+    val brokers = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_BROKERS)
+    val zk = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_ZK)
+    val group = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_GROUP)
+    val numStreams = BroadConfig.getInstance(ctx).value.getProperty(Consts.KAFKA_NUM_STREAMS) toInt
 
     LOG.info(s"topics: $topics, zookeeper: $zk, group id: $group, num streams: $numStreams")
 
@@ -73,7 +73,7 @@ object KafkaToHdfs {
     // 缺点是这种方式没有更新 zk，基于 zk 的监控工具无法有效监控
 
     val topicsSet = topics.split(",").toSet
-    val kafkaParams = Map[String, Object](
+    val kafkaConsts = Map[String, Object](
       "bootstrap.servers" -> "hzadg-mammut-platform8.server.163.org:6667",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
@@ -85,7 +85,7 @@ object KafkaToHdfs {
     val messages = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent,
-      Subscribe[String, String](topicsSet, kafkaParams))
+      Subscribe[String, String](topicsSet, kafkaConsts))
 
     // Get the lines, split them into words, count the words and print
     var offsetRanges = Array[OffsetRange]()
@@ -98,7 +98,7 @@ object KafkaToHdfs {
       rdd
     }.map(_.value())
 
-    val hdfsPath = BroadConfig.getInstance(ctx).value.getProperty(Params.HDFS_PATH)
+    val hdfsPath = BroadConfig.getInstance(ctx).value.getProperty(Consts.HDFS_PATH)
     LOG.info(s"hdfs path: $hdfsPath")
 
     // 对我们获取的数据, 进行处理, 保存到 hdfs 中
