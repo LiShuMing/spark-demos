@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.netease.spark;
+package com.netease.spark.streaming;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -25,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.netease.spark.utils.Consts;
+import com.netease.spark.utils.JConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.spark.streaming.kafka010.ConsumerStrategies;
@@ -52,27 +53,21 @@ public final class JavaDirectKafkaWordCount {
   private static final Pattern SPACE = Pattern.compile(" ");
 
   public static void main(String[] args) throws Exception {
-    if (args.length < 2) {
-      System.err.println("Usage: JavaDirectKafkaWordCount <brokers> <topics>\n" +
-          "  <brokers> is a list of one or more Kafka brokers\n" +
-          "  <topics> is a list of one or more kafka topics to consume from\n\n");
-      System.exit(1);
-    }
-
-    String brokers = args[0];
-    String topics = args[1];
+    final String kafkaBrokers = JConfig.getInstance().getProperty(Consts.KAFKA_BROKERS);
+    final String kafkaTopics = JConfig.getInstance().getProperty(Consts.KAFKA_TOPICS);
+    final String kafkaGroup = JConfig.getInstance().getProperty(Consts.KAFKA_GROUP);
 
     // Create context with a 2 seconds batch interval
     SparkConf sparkConf = new SparkConf().setAppName("JavaDirectKafkaWordCount");
     JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, Durations.seconds(2));
 
-    Set<String> topicsSet = new HashSet<>(Arrays.asList(topics.split(",")));
+    Set<String> topicsSet = new HashSet<>(Arrays.asList(kafkaTopics.split(",")));
+
     Map<String, Object> kafkaParams = new HashMap<>();
-    kafkaParams.put("metadata.broker.list", brokers);
-    kafkaParams.put("bootstrap.servers", brokers);
+    kafkaParams.put("bootstrap.servers", kafkaBrokers);
     kafkaParams.put("key.deserializer", StringDeserializer.class);
     kafkaParams.put("value.deserializer", StringDeserializer.class);
-    kafkaParams.put("group.id", "spark_streaming_group_0");
+    kafkaParams.put("group.id", kafkaGroup);
     kafkaParams.put("auto.offset.reset", "earliest");
     kafkaParams.put("enable.auto.commit", false);
 
@@ -81,7 +76,7 @@ public final class JavaDirectKafkaWordCount {
         KafkaUtils.createDirectStream(
             jssc,
             LocationStrategies.PreferConsistent(),
-            ConsumerStrategies.<String, String>Subscribe((Collection<String>)Arrays.asList((String[])topicsSet.toArray()), kafkaParams)
+            ConsumerStrategies.<String, String>Subscribe(Arrays.asList(topicsSet.toArray(new String[0])), kafkaParams)
         );
 
     /**

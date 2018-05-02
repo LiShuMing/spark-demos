@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.netease.spark.hbase
+package com.netease.spark.streaming.hbase
 
 import com.netease.spark.utils.{BroadConfig, Consts}
 import org.apache.hadoop.conf.Configuration

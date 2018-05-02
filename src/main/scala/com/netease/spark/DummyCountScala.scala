@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.netease.spark.streaming
+package com.netease.spark
 
 import com.netease.spark.utils.Env
 import org.apache.spark.{SparkConf, SparkContext}

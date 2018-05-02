@@ -15,17 +15,7 @@
  * limitations under the License.
  */
 
-package com.netease.spark;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+package com.netease.spark.streaming.hbase;
 
 import com.netease.spark.utils.Consts;
 import com.netease.spark.utils.JConfig;
@@ -52,8 +42,17 @@ import org.apache.spark.streaming.kafka010.LocationStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JavaKafkaToHBase {
-  private final static Logger LOGGER = LoggerFactory.getLogger(JavaKafkaToHBase.class);
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class JavaKafkaToHBaseKerberos {
+  private final static Logger LOGGER = LoggerFactory.getLogger(JavaKafkaToHBaseKerberos.class);
 
   private static HConnection connection = null;
   private static HTableInterface table = null;
@@ -112,15 +111,16 @@ public class JavaKafkaToHBase {
     kafkaParams.put("group.id", kafkaGroup);
     kafkaParams.put("auto.offset.reset", "earliest");
     kafkaParams.put("enable.auto.commit", false);
+    // 在kerberos环境下，这个配置需要增加
+    kafkaParams.put("security.protocol", "SASL_PLAINTEXT");
 
     // Create direct kafka stream with brokers and topics
     final JavaInputDStream<ConsumerRecord<String, String>> stream =
         KafkaUtils.createDirectStream(
             ssc,
             LocationStrategies.PreferConsistent(),
-            ConsumerStrategies.<String, String>Subscribe((Collection<String>)Arrays.asList((String[])topicsSet.toArray()), kafkaParams)
+            ConsumerStrategies.<String, String>Subscribe(Arrays.asList(topicsSet.toArray(new String[0])), kafkaParams)
         );
-
 
     JavaDStream<String> lines = stream.map(new Function<ConsumerRecord<String, String>, String>() {
       private static final long serialVersionUID = -1801798365843350169L;

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.netease.spark.streaming
+package com.netease.spark.streaming.hdfs
 
-import com.netease.spark.utils.{BroadConfig, Env, HdfsConnection, Consts}
+import com.netease.spark.utils.{BroadConfig, Consts, Env, HdfsConnection}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.log4j.Logger
 import org.apache.spark.streaming._
