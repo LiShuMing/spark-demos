@@ -15,21 +15,27 @@
  * limitations under the License.
  */
 
-package com.netease.spark.utils
+package com.netease.spark
 
-object Params {
-  // kafka params
-  val KAFKA_ZK = "kafka.zookeeper"
-  val KAFKA_GROUP = "kafka.groupid"
-  val KAFKA_TOPICS = "kafka.topics"
-  val KAFKA_NUM_STREAMS = "kafka.num.streams"
-  val KAFKA_BROKERS = "kafka.brokers"
+import com.netease.spark.utils.Env
+import org.apache.spark.{SparkConf, SparkContext}
 
-  // hdfs params
-  val HDFS_PATH = "hdfs.path"
+import scala.util.Random
 
-  val HBASE_TABLE = "hbase.table"
-  val HBASE_ZK = "hbase.zk"
-  val HBASE_PRINCIPLE = "hbase.principle"
-  val HBASE_KEYTAB = "hbase.keytab"
+object DummyCountScala {
+	def main(args: Array[String]) {
+		val sparkConf = new SparkConf().setAppName("DummyCountScala")
+		if (Env.TEST) {
+			sparkConf.setMaster("local[2]")
+		}
+		val sc = new SparkContext(sparkConf)
+		val distData = sc.parallelize(List.range(1L, 101L), 100)
+
+		distData.flatMap(x => List.range(1L, 101L)).mapPartitions( x => {
+				val rng = new Random()
+				for (i <- x) yield rng.nextLong()
+			}).take(1)
+
+    sc.stop()
+	}
 }

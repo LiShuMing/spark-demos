@@ -1,3 +1,18 @@
+
+## Java版本
+### JavaDirectKafkaWordCount
+启动脚本
+```$xslt
+/usr/ndp/current/spark2_client/bin/spark-submit --conf spark.yarn.keytab=/etc/security/keytabs/kafka.service.keytab   --conf spark.yarn.principal=kafka/hzadg-mammut-platform1.server.163.org@BDMS.163.COM    --files /usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf,/etc/security/keytabs/kafka.service.keytab    --driver-java-options "-Djava.security.auth.login.config=/usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf"   --conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=/usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf"   --class com.netease.spark.streaming.JavaDirectKafkaWordCount   --master local[2]    ./target/spark-demo-0.1.0-jar-with-dependencies.jar hzadg-mammut-platform8.server.163.org:6667 spark-test
+```
+### JavaKafaToHdfs
+
+启动脚本
+```$xslt
+ /usr/ndp/current/spark2_client/bin/spark-submit --conf spark.yarn.keytab=/etc/security/keytabs/kafka.service.keytab   --conf spark.yarn.principal=kafka/hzadg-mammut-platform1.server.163.org@BDMS.163.COM    --files /usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf   --driver-java-options "-Djava.security.auth.login.config=/usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf"   --conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=/usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf"   --class com.netease.spark.JavaKafkaToHdfs   --master yarn   --deploy-mode cluster   ./target/spark-demo-0.1.0-jar-with-dependencies.jar hzadg-mammut-platform8.server.163.org:6667 spark-test
+```
+
+## Scala版本
 ### DirectKafkaWordCountKerberos
 > 统计Kfaka流中的word count.
 
@@ -68,7 +83,7 @@ put 'hbase-test', 'row2', 'f1:a', 'v2'
 /usr/ndp/current/spark2_client/bin/spark-submit \
 --conf spark.yarn.keytab=/etc/security/keytabs/hbase.service.keytab \
 --conf spark.yarn.principal=hbase/hzadg-mammut-platform1.server.163.org@BDMS.163.COM \
---class com.netease.spark.hbase.HBaseTest \
+--class com.netease.spark.streaming.hbase.HBaseTest \
 --master local[2]  \
 ./target/spark-demo-0.1.0-jar-with-dependencies.jar  
 ```
@@ -80,7 +95,7 @@ put 'hbase-test', 'row2', 'f1:a', 'v2'
 kinit -kt /etc/security/keytabs/hbase.service.keytab hbase/hzadg-mammut-platform1.server.163.org@BDMS.163.COM
 
 /usr/ndp/current/spark2_client/bin/spark-submit \
---class com.netease.spark.hbase.HBaseTest \
+--class com.netease.spark.streaming.hbase.HBaseTest \
 --master local[2]  \
 ./target/spark-demo-0.1.0-jar-with-dependencies.jar  
 ```
@@ -93,7 +108,7 @@ kinit -kt /etc/security/keytabs/hbase.service.keytab hbase/hzadg-mammut-platform
 /usr/ndp/current/spark2_client/bin/spark-submit \
 --conf spark.yarn.keytab=/etc/security/keytabs/hbase.service.keytab \
 --conf spark.yarn.principal=hbase/hzadg-mammut-platform1.server.163.org@BDMS.163.COM \
---class com.netease.spark.hbase.KafkaToHbase \
+--class com.netease.spark.streaming.hbase.KafkaToHbase \
 --master local[2]  \
 ./target/spark-demo-0.1.0-jar-with-dependencies.jar  
 ```

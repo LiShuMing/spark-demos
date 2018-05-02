@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.netease.spark.streaming
+package com.netease.spark.streaming.hdfs
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}

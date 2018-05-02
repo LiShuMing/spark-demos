@@ -15,27 +15,21 @@
  * limitations under the License.
  */
 
-package com.netease.spark.streaming
+package com.netease.spark.utils;
 
-import com.netease.spark.utils.Env
-import org.apache.spark.{SparkConf, SparkContext}
+public class Consts {
+  // kafka params
+  public static final String KAFKA_ZK = "kafka.zookeeper";
+  public static final String KAFKA_GROUP = "kafka.groupid";
+  public static final String KAFKA_TOPICS = "kafka.topics";
+  public static final String KAFKA_NUM_STREAMS = "kafka.num.streams";
+  public static final String KAFKA_BROKERS = "kafka.brokers";
 
-import scala.util.Random
+  // hdfs params
+  public static final String HDFS_PATH = "hdfs.path";
 
-object DummyCountScala {
-	def main(args: Array[String]) {
-		val sparkConf = new SparkConf().setAppName("DummyCountScala")
-		if (Env.TEST) {
-			sparkConf.setMaster("local[2]")
-		}
-		val sc = new SparkContext(sparkConf)
-		val distData = sc.parallelize(List.range(1L, 101L), 100)
-
-		distData.flatMap(x => List.range(1L, 101L)).mapPartitions( x => {
-				val rng = new Random()
-				for (i <- x) yield rng.nextLong()
-			}).take(1)
-
-    sc.stop()
-	}
+  public static final String HBASE_TABLE = "hbase.table";
+  public static final String HBASE_ZK = "hbase.zk";
+  public static final String HBASE_PRINCIPLE = "hbase.principle";
+  public static final String HBASE_KEYTAB = "hbase.keytab";
 }

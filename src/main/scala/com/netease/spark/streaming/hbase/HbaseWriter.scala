@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.netease.spark.hbase
+package com.netease.spark.streaming.hbase
 
 import java.util
 

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-package com.netease.spark.hbase
-import com.netease.spark.utils.{Config, Params}
+package com.netease.spark.streaming.hbase
+import com.netease.spark.utils.{JConfig, Consts}
 import org.apache.hadoop.hbase.client.HBaseAdmin
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
 import org.apache.hadoop.hbase.{HBaseConfiguration, HTableDescriptor, TableName}
@@ -27,7 +27,7 @@ object HBaseTest {
   def main(args: Array[String]): Unit = {
     val LOG = Logger.getLogger(getClass.getName)
 
-    val hbaseTable = Config.getInstance().getProperty(Params.HBASE_TABLE).toString
+    val hbaseTable = JConfig.getInstance().getProperty(Consts.HBASE_TABLE).toString
 
     // TODO, 注意在必须将`HBASE_CONF_DIR`路径设置在Spark Driver的classpath中， 可以通过spark-defaults.conf或者通过--driver-class-path设置；
     val conf = HBaseConfiguration.create()
