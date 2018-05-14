@@ -54,6 +54,13 @@
             <artifactId>spark-streaming-kafka-0-10_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>
             <scope>compile</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--dependency>
@@ -81,6 +88,53 @@
             <artifactId>hadoop-client</artifactId>
             <version>${hadoop.version}</version>
             <scope>provided</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-app</artifactId>
+                </exclusion>
+                 <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-yarn-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-kerberos-codec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.curator</groupId>
+                    <artifactId>curator-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.curator</groupId>
+                    <artifactId>curator-framework</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.curator</groupId>
+                    <artifactId>curator-recipes</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- scala -->
@@ -115,7 +169,7 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-testing-util</artifactId>
             <version>${hbase.version}</version>
-            <scope>${hbase.deps.scope}</scope>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <!-- SPARK-4455 -->
@@ -168,7 +222,7 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
             <version>${hbase.version}</version>
-            <scope>${hbase.deps.scope}</scope>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <!-- SPARK-4455 -->
@@ -242,16 +296,15 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-hadoop-compat</artifactId>
             <version>${hbase.version}</version>
-            <scope>${hbase.deps.scope}</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-hadoop-compat</artifactId>
             <version>${hbase.version}</version>
             <type>test-jar</type>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -365,7 +418,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>assemble-all</id>
+                        <id>assemble</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
