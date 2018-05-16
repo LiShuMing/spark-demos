@@ -22,7 +22,6 @@ import java.util.Properties;
 
 public class JConfig {
   private static Properties properties = null;
-  private static String PROPERTIES_RESOURCE_PATH = "src/main/resources/conf.properties";
   private static String PROPERTIES_RESOURCE_FILE_NAME = "conf.properties";
 
   public static Properties getInstance() {
@@ -30,10 +29,16 @@ public class JConfig {
       synchronized(JConfig.class) {
         if (properties == null) {
           try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            InputStream inputStream = classLoader.getResourceAsStream(PROPERTIES_RESOURCE_FILE_NAME);
-            properties = new Properties();
-            properties.load(inputStream);
+            if (Utils.checkFileExists("./conf/conf.properties")) {
+              properties = Utils.getPropertiesFromPath("./conf/conf.properties");
+            } else if (Utils.checkFileExists("./conf.properties")) {
+              properties = Utils.getPropertiesFromPath("./conf.properties");
+            } else {
+              ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+              InputStream inputStream = classLoader.getResourceAsStream(PROPERTIES_RESOURCE_FILE_NAME);
+              properties = new Properties();
+              properties.load(inputStream);
+            }
           } catch (Exception e) {
             throw new RuntimeException("Resource properties load failed:", e);
           }

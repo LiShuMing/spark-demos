@@ -17,7 +17,7 @@
 
 package com.netease.spark.streaming.hbase
 
-import com.netease.spark.utils.{BroadConfig, Consts}
+import com.netease.spark.utils.{BroadConfig, Consts, HbaseWriter}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.{HBaseConfiguration, HTableDescriptor, TableName}
 import org.apache.hadoop.hbase.client.{HBaseAdmin, HConnection, HConnectionManager, HTableInterface}
@@ -31,7 +31,7 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object KafkaToHbase {
+object KafkaToHbaseKerberos {
   val LOG = Logger.getLogger(getClass.getName)
 
   def main(args: Array[String]) {

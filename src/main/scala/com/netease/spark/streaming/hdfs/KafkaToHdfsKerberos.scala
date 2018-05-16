@@ -34,7 +34,7 @@ import org.apache.spark.{SparkConf, SparkContext}
   * * 默认开启了checkpoint， 根据实际情况关闭与否；
   * * 有些默认配置，根据实际情况设定；
   */
-object KafkaToHdfs {
+object KafkaToHdfsKerberos {
   val LOG = Logger.getLogger(getClass.getName)
 
   private def functionToCreateContext(): StreamingContext = {

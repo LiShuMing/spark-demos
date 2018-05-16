@@ -11,10 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-/**
- * @author jiacx
- * @date 2018-05-14
- */
 public class HBaseConnPool {
 	private final static Logger logger = LoggerFactory.getLogger(HBaseConnPool.class);
 	static Connection conn;
