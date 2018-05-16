@@ -84,6 +84,8 @@ object DirectKafkaWordCount {
     //TODO: you can choose this or not
     ssc.checkpoint("/tmp/spark-checkpoint")
 
+    messages.checkpoint(Duration(10000))
+
     // Get the lines, split them into words, count the words and print
     var offsetRanges = Array[OffsetRange]()
     val lines = messages.transform { rdd =>
@@ -93,6 +95,7 @@ object DirectKafkaWordCount {
     }.map(_.value())
 
     val words = lines.flatMap(_.split(" "))
+    words.checkpoint(Duration(20000))
     val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
 
     println("Word counts print...")

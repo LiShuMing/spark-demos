@@ -23,17 +23,21 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import com.netease.spark.utils.Consts;
+import com.netease.spark.utils.HBaseConnPool;
 import com.netease.spark.utils.JConfig;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.HConnection;
 import org.apache.hadoop.hbase.client.HConnectionManager;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -87,10 +91,10 @@ public class JavaKafkaToHBase {
   }
 
   public static void main(String[] args) throws Exception {
-    String hbaseTable = JConfig.getInstance().getProperty(Consts.HBASE_TABLE);
-    String kafkaBrokers = JConfig.getInstance().getProperty(Consts.KAFKA_BROKERS);
-    String kafkaTopics = JConfig.getInstance().getProperty(Consts.KAFKA_TOPICS);
-    String kafkaGroup = JConfig.getInstance().getProperty(Consts.KAFKA_GROUP);
+    final String hbaseTable = JConfig.getInstance().getProperty(Consts.HBASE_TABLE);
+    final String kafkaBrokers = JConfig.getInstance().getProperty(Consts.KAFKA_BROKERS);
+    final String kafkaTopics = JConfig.getInstance().getProperty(Consts.KAFKA_TOPICS);
+    final String kafkaGroup = JConfig.getInstance().getProperty(Consts.KAFKA_GROUP);
 
     // open hbase
     try {
@@ -136,18 +140,28 @@ public class JavaKafkaToHBase {
       }
     });
 
-    JavaDStream<Long> nums = lines.count();
+    //JavaDStream<Long> nums = lines.count();
 
-    nums.foreachRDD(new VoidFunction<JavaRDD<Long>>() {
+    lines.foreachRDD(new VoidFunction<JavaRDD<String>>() {
       private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-
       @Override
-      public void call(JavaRDD<Long> rdd) throws Exception {
-        Long num = rdd.take(1).get(0);
-        String ts = sdf.format(new Date());
-        Put put = new Put(Bytes.toBytes(ts));
-        put.add(Bytes.toBytes("f"), Bytes.toBytes("nums"), Bytes.toBytes(num));
-        table.put(put);
+      public void call(JavaRDD<String> rdd) throws Exception {
+        rdd.foreachPartition(new VoidFunction<Iterator<String>>() {
+          @Override
+          public void call(Iterator<String> iterator) throws Exception {
+            Connection connection = HBaseConnPool.getConn();
+            Table table = HBaseConnPool.getTable(connection, hbaseTable);
+
+          	while (iterator.hasNext()) {
+              String v = iterator.next();
+              LOGGER.info("value" + v);
+              String ts = sdf.format(new Date());
+              Put put = new Put(Bytes.toBytes(ts));
+              put.add(Bytes.toBytes("f"), Bytes.toBytes("v"), Bytes.toBytes(v));
+              table.put(put);
+            }
+          }
+        });
       }
     });
 
