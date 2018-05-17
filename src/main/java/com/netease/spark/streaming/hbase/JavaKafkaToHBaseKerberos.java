@@ -42,7 +42,6 @@ import org.apache.spark.streaming.kafka010.OffsetRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class JavaKafkaToHBaseKerberos {
     //conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
     //conf.set("spark.kryo.registrator", "com.netease.spark.utils.KafkaRegistrator");
 
-    JavaStreamingContext ssc = new JavaStreamingContext(conf, new Duration(2000));
+    JavaStreamingContext ssc = new JavaStreamingContext(conf, new Duration(10000));
 
     Set<String> topicsSet = new HashSet<>(Arrays.asList(kafkaTopics.split(",")));
     Map<String, Object> kafkaParams = new HashMap<>();
@@ -116,13 +115,12 @@ public class JavaKafkaToHBaseKerberos {
               String v = record.value();
 
               if (v != null && !v.isEmpty()) {
-                LOGGER.info("value" + v);
+                LOGGER.info("value:" + v);
                 Put put = new Put(Bytes.toBytes(rowKey));
                 put.add(Bytes.toBytes("f"), Bytes.toBytes("v"), Bytes.toBytes(v));
                 putList.add(put);
               }
             }
-
             table.put(putList);
           }
         });

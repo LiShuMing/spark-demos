@@ -1,6 +1,5 @@
 package com.netease.spark.utils;
 
-import com.netease.spark.streaming.hdfs.JavaKafkaToHdfs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -15,7 +14,7 @@ import java.util.UUID;
 
 
 public class HdfsUtils {
-  private final static Logger LOGGER = LoggerFactory.getLogger(JavaKafkaToHdfs.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(HdfsUtils.class);
   private static Configuration conf = null;
   private static FileSystem fileSystem = null;
 

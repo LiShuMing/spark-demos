@@ -48,7 +48,7 @@ import java.util.Map;
 import java.util.Set;
 
 public final class JavaKafkaToHdfsKerberos {
-  private final static Logger LOGGER = LoggerFactory.getLogger(JavaKafkaToHdfs.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(JavaKafkaToHdfsKerberos.class);
 
   public static void main(String[] args) throws Exception {
     final String kafkaBrokers = JConfig.getInstance().getProperty(Consts.KAFKA_BROKERS);
@@ -58,7 +58,7 @@ public final class JavaKafkaToHdfsKerberos {
 
     // Create context with a 2 seconds batch interval
     SparkConf sparkConf = new SparkConf()
-        .setAppName("JavaDirectKafkaWordCount")
+        .setAppName("JavaDirectKafkaWordCountKerberos")
         .set("spark.streaming.receiver.writeAheadLog.enable", "true") // 先写日志, 提高容错性, 避免 receiver 挂掉
         .set("spark.streaming.receiver.maxRate", "5000") // 每秒的读取速率
         .set("spark.streaming.blockInterval", "1000ms") // block 的大小, 每个 block interval 的数据对应于一个 task
