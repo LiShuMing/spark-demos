@@ -89,7 +89,7 @@ put 'hbase-test', 'row2', 'f1:a', 'v2'
 
 启动脚本:
 ```
-/usr/ndp/current/spark2_client/bin/spark-submit 
+/usr/ndp/current/spark2_client/bin/spark-submit \
 --conf spark.yarn.keytab=/etc/security/keytabs/kafka.service.keytab \
 --conf spark.yarn.principal=kafka/hzadg-mammut-platform1.server.163.org@BDMS.163.COM \
 --files /usr/ndp/current/kafka_client/conf/kafka_client_jaas.conf,/etc/security/keytabs/kafka.service.keytab \

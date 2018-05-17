@@ -20,6 +20,14 @@
                 <include>*.*</include>
             </includes>
         </fileSet>
+
+        <fileSet>
+            <directory>${project.build.directory}/target/spark-demo-0.1.0.jar</directory>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>*.*</include>
+            </includes>
+        </fileSet>
     </fileSets>
 
     <!--dependencySets>
